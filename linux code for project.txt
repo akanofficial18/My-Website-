@@ -1,0 +1,147 @@
+holiday_list() {
+    holiday_found=1
+    case "$month" in
+        august)
+            echo "15 AUG : Independence Day"
+            echo "18 AUG : SIP Start"
+            echo "27 AUG : Ganesh Chaturthi"
+            ;;
+        september)
+            echo "6 SEP : Anant Chaturthi / Id-E-Milad"
+            ;;
+        october)
+            echo "2 OCT : Gandhi Jayanti"
+            echo "17 OCT : Dasara"
+            echo "20–25 OCT : Non-instructional week"
+            ;;
+        november)
+            echo "17 NOV : Anand Yatra"
+            ;;
+        december)
+            echo "25 DEC : Christmas"
+            ;;
+        january)
+            echo "26 JAN : Republic Day"
+            ;;
+        *)
+            holiday_found=0
+            ;;
+    esac
+
+    if [[ "$holiday_found" -eq 0 ]]; then
+        echo "No holidays this month"
+    fi
+}
+
+class_timetable() {
+    echo "Today Timetable"
+    case "$day" in
+        monday)
+            echo "10:30 - 11:25 : FOC"
+            echo "11:25 - 12:20 : AM"
+            echo "13:15 - 15:05 : DT LAB"
+            ;;
+        tuesday)
+            echo "10:30 - 11:25 : AM"
+            echo "11:25 - 12:20 : FOC"
+            echo "13:15 - 15:05 : FOC LAB"
+            ;;
+        wednesday)
+            echo "10:30 - 11:25 : CDE"
+            echo "11:25 - 12:20 : LINUX"
+            ;;
+        thursday)
+            echo "9:25 - 10:20 : MT"
+            echo "10:30 - 11:25 : AM"
+            echo "11:25 - 12:20 : FOC"
+            echo "13:15 - 15:05 : AM LAB"
+            ;;
+        friday)
+            echo "10:30 - 11:25 : DT"
+            echo "11:25 - 12:20 : SON CHEM"
+            echo "13:15 - 15:05 : SON CHEM LAB"
+            echo "15:10 - 16:50 : LINUX LAB"
+            ;;
+        saturday)
+            echo "10:30 - 11:25 : CDE"
+            echo "11:25 - 12:20 : SON CHEM"
+            ;;
+        *)
+            echo "No classes"
+            ;;
+    esac
+}
+
+weather_forecast() {
+    read -p "Enter location: " location
+    curl -s "wttr.in/$location"
+}
+
+while true
+do
+    clear
+    echo "Student Command Hub"
+    echo "1) Timetable + Holidays"
+    echo "2) Weather"
+    echo "3) Calendar"
+    echo "4) Exit"
+    read -p "Choose: " choice
+
+    case "$choice" in
+        1)
+            whoami
+            date
+            read -p "Enter day: " day
+            read -p "Enter month: " month
+
+            day=$(echo "$day" | tr 'A-Z' 'a-z')
+            month=$(echo "$month" | tr 'A-Z' 'a-z')
+
+            if [[ "$day" == "sunday" ]]; then
+                echo "Holiday"
+            elif [[ "$day" == "monday" ]]; then
+                echo "Weekday"
+            fi
+
+            cal
+            class_timetable
+            holiday_list
+
+            touch info.txt
+            echo "Linux Script Demo" > info.txt
+            cat info.txt
+            cp info.txt copy.txt
+            mv copy.txt renamed.txt
+            grep "Linux" info.txt
+            head info.txt
+            tail info.txt
+            sed 's/Linux/UNIX/' info.txt
+            
+            for count in {1..5}
+            do
+                if [[ $count -eq 3 ]]; then
+                    echo "Special count reached: $count"
+                else
+                    echo "Count: $count"
+                fi
+            done
+            read -p "Press Enter to continue..."
+            ;;
+        2)
+            weather_forecast
+            read -p "Press Enter to continue..."
+            ;;
+        3)
+            cal
+            read -p "Press Enter to continue..."
+            ;;
+        4)
+            echo "Exiting..."
+            break
+            ;;
+        *)
+            echo "Invalid choice"
+            sleep 1
+            ;;
+    esac
+done
